@@ -37,7 +37,8 @@ class _MyHomePageState extends State<MyHomePage> {
     const homePage(),
     const matchPage(),
     const followPage(),
-    const statsPage()
+    const statsPage(),
+    const Text("hello")
   ];
 
   void onBottomTap(int index) {
