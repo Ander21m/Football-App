@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:footballcustom/Pages/FollowPage.dart';
-import 'package:footballcustom/Pages/HomePage.dart';
+import 'package:footballcustom/Pages/Utility/utility.dart';
+import 'package:footballcustom/Pages/homePage.dart';
 import 'package:footballcustom/Pages/MatchPage.dart';
 import 'package:footballcustom/Pages/StatsPage.dart';
 import 'package:footballcustom/firstscreen.dart';
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: 'Flutter Demo',
       home: SplashScreen(),
     );
@@ -30,15 +31,15 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+  
   int _pageIndex = 0;
 
   List<Widget> pageWidgets = [
-    const homePage(),
+    const HomePage(),
     const matchPage(),
     const followPage(),
     const statsPage(),
-    const Text("hello")
+    
   ];
 
   void onBottomTap(int index) {
@@ -49,44 +50,20 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(
-        title: Text(
-          "Football",
-          style: TextStyle(
-              color: Color.fromARGB(255, 55, 184, 59),
-              fontWeight: FontWeight.bold,
-              fontSize: 30),
-        ),
-        centerTitle: true,
-        backgroundColor: Color.fromARGB(255, 206, 204, 204),
-        leading: IconButton(
-          icon: Icon(
-            Icons.menu,
-            color: Colors.white,
-            size: 30,
-          ),
-          onPressed: () {
-            _scaffoldKey.currentState?.openDrawer();
-          },
-        ),
-        actions: [
-          IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.search,
-                color: Colors.white,
-                size: 30,
-              ))
-        ],
-      ),
+      appBar: Utility().giveSuitableAppBar(_pageIndex, _scaffoldKey),
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
-            DrawerHeader(
+           const DrawerHeader(
               padding: EdgeInsets.symmetric(vertical: 50, horizontal: 30),
+              
+              decoration: BoxDecoration(
+                color: Color.fromARGB(255, 45, 179, 49),
+              ),
               child: Text(
                 'Drawer Header',
                 style: TextStyle(
@@ -94,25 +71,23 @@ class _MyHomePageState extends State<MyHomePage> {
                     fontWeight: FontWeight.bold,
                     fontSize: 28),
               ),
-              decoration: BoxDecoration(
-                color: Color.fromARGB(255, 45, 179, 49),
-              ),
             ),
             ListTile(
-              title: Text(
+              onTap: () {
+                // Add your item 1 action here
+                Navigator.pop(context); // Close the drawer
+              },
+              title: const Text(
                 'Item 1',
                 style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.w500,
                     fontSize: 18),
               ),
-              onTap: () {
-                // Add your item 1 action here
-                Navigator.pop(context); // Close the drawer
-              },
+              
             ),
             ListTile(
-              title: Text(
+              title: const Text(
                 'Item 2',
                 style: TextStyle(
                     color: Colors.black,
@@ -131,7 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: pageWidgets[_pageIndex],
 
 
-          color: const Color.fromARGB(255, 80, 198, 84)),
+         ),
 
 
 
