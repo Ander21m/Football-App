@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:footballcustom/Pages/FollowPage.dart';
 import 'package:footballcustom/Pages/Utility/utility.dart';
-import 'package:footballcustom/Pages/homePage.dart';
+import 'package:footballcustom/Pages/homepage.dart';
 import 'package:footballcustom/Pages/MatchPage.dart';
 import 'package:footballcustom/Pages/StatsPage.dart';
 import 'package:footballcustom/firstscreen.dart';
