@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -12,21 +13,37 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List liveMatches = [];
+  Future<List<dynamic>>? liveMatches;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    testValue();
+    liveMatches = testValue();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (liveMatches.isEmpty) {
-      return const Center(
-        child: CircularProgressIndicator(color: Colors.green,)
-      );
-    } else {
+    return Container(
+      child: FutureBuilder<List<dynamic>>(
+        future: liveMatches,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator(color: Colors.green,));
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return  Container(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(width: 70,height: 70,margin: EdgeInsets.fromLTRB(0, 0, 20, 0),child: Image.asset("images/test.jpg")),
+                  const Text("Hello This is football app",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 17),)
+                ],
+              ));
+          }
+
+    else {
       return Column(
         children: [
           Container(
@@ -42,9 +59,9 @@ class _HomePageState extends State<HomePage> {
                           width: 50,
                           height: 80,
                           child: Image.network(
-                              liveMatches[0]["homeTeam"]["crest"])),
+                              snapshot.data![0]["homeTeam"]["crest"])),
                       Text(
-                        liveMatches[0]["homeTeam"]["name"],
+                        snapshot.data![0]["homeTeam"]["name"],
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ],
@@ -63,8 +80,8 @@ class _HomePageState extends State<HomePage> {
                           width: 50,
                           height: 80,
                           child: Image.network(
-                              liveMatches[0]["awayTeam"]["crest"])),
-                      Text(liveMatches[0]["awayTeam"]["name"],
+                              snapshot.data![0]["awayTeam"]["crest"])),
+                      Text(snapshot.data![0]["awayTeam"]["name"],
                           style: TextStyle(fontWeight: FontWeight.bold)),
                     ],
                   ),
@@ -85,24 +102,21 @@ class _HomePageState extends State<HomePage> {
                 ],
               ))
         ],
-      );
-    }
+      );}
+    }));
     // TODO: implement build
   }
 
-  Future<void> testValue() async {
+  Future<List<dynamic>> testValue() async {
     final response = await http.get(
-      Uri.parse(
-          'http://api.football-data.org/v4/competitions/CL/matches/?status=SCHEDULED'),
+      Uri.parse('http://api.football-data.org/v4/competitions/CL/matches/?status=SCHEDULED'),
       headers: {'X-Auth-Token': '5213826a7f66402a9840bbfd3a78c20d'},
     );
     if (response.statusCode == 200) {
-      setState(() {
-        liveMatches = json.decode(response.body)["matches"];
-        //print(liveMatches[0]);
-      });
+      return json.decode(response.body)["matches"];
     } else {
       throw Exception('Failed to load live scores');
     }
+  
   }
 }
