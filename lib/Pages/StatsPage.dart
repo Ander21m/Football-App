@@ -80,38 +80,38 @@ class _statsPageState extends State<statsPage> {
               future: standingData,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                      child: Column(
-                    children: [
-                      SizedBox(
-                        height: 7,
-                      ),
-                      CircularProgressIndicator(
-                        color: Colors.green,
-                      ),
-                    ],
-                  ));
-                } else if (snapshot.hasError) {
-                  return Center(
-                      child: Column(
-                    children: [
-                      SizedBox(
-                        height: 7,
-                      ),
-                      Text('Error: ${snapshot.error}'),
-                    ],
-                  ));
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Center(
-                      child: Column(
-                    children: [
-                      SizedBox(
-                        height: 7,
-                      ),
-                      Text('No standing for league found'),
-                    ],
-                  ));
-                } else {
+            return Column(
+              children: [
+                Container(
+                  margin: EdgeInsets.symmetric(
+                      vertical: ((MediaQuery.of(context).size.height -220 )) / 2),
+                  child: const Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.green,
+                    ),
+                  ),
+                ),
+              ],
+            );
+          } else if (snapshot.hasError) {
+            return Column(
+              children: [
+                Container(
+                    margin: EdgeInsets.symmetric(
+                        vertical: ((MediaQuery.of(context).size.height -220) ) / 2),
+                    child: Center(child: Text('Error: ${snapshot.error}'))),
+              ],
+            );
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Column(
+              children: [
+                Container(
+                    margin: EdgeInsets.symmetric(
+                        vertical: ((MediaQuery.of(context).size.height -220 )/2 )),
+                    child: const Center(child: Text('No standing for league found'))),
+              ],
+            );
+          } else {
                   List<dynamic> teams = snapshot.data!["standings"][0]["table"];
                   return Column(
                     children: [

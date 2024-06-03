@@ -8,38 +8,38 @@ class StandingUtil {
       future: matchesData,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-              child: Column(
-            children: [
-              SizedBox(
-                height: 7,
-              ),
-              CircularProgressIndicator(
-                color: Colors.green,
-              ),
-            ],
-          ));
-        } else if (snapshot.hasError) {
-          return Center(
-              child: Column(
-            children: [
-              const SizedBox(
-                height: 7,
-              ),
-              Text('Error: ${snapshot.error}'),
-            ],
-          ));
-        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Center(
-              child: Column(
-            children: [
-              SizedBox(
-                height: 7,
-              ),
-              Text('No standing for league found'),
-            ],
-          ));
-        } else {
+            return Column(
+              children: [
+                Container(
+                  margin: EdgeInsets.symmetric(
+                      vertical: ((MediaQuery.of(context).size.height -350 )) / 2),
+                  child: const Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.green,
+                    ),
+                  ),
+                ),
+              ],
+            );
+          } else if (snapshot.hasError) {
+            return Column(
+              children: [
+                Container(
+                    margin: EdgeInsets.symmetric(
+                        vertical: ((MediaQuery.of(context).size.height -350) ) / 2),
+                    child: Center(child: Text('Error: ${snapshot.error}'))),
+              ],
+            );
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Column(
+              children: [
+                Container(
+                    margin: EdgeInsets.symmetric(
+                        vertical: ((MediaQuery.of(context).size.height -350 )/2 )),
+                    child: Center(child: Text('No matches found'))),
+              ],
+            );
+          } else {
           List matches = snapshot.data!["matches"];
           
          
@@ -66,9 +66,9 @@ class StandingUtil {
               const SizedBox(width: 5,),
               SizedBox(width: 105,child: Text(m["homeTeam"]["shortName"])),
               
-              Container(width: 20,child: Center(child: m["score"]["fullTime"]["home"] == null ? Text("??"):Text("${m["score"]["fullTime"]["home"]}"))),
+              Container(width: 20,child: Center(child: Text("${m["score"]["fullTime"]["home"] ?? "??"}"))),
               Text(" VS "),
-              Container(width: 20,child: Center(child: m["score"]["fullTime"]["away"] == null ? Text("??"):Text("${m["score"]["fullTime"]["away"]}"))),
+              Container(width: 20,child: Center(child: Text("${m["score"]["fullTime"]["away"]?? "??"}"))),
               Container(width: 105,child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
