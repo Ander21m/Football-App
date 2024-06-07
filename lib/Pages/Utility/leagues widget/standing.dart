@@ -1,91 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:intl/intl.dart';
+import 'package:footballcustom/Pages/Utility/utility.dart';
+
 
 class StandingUtil {
   static Widget getAllMatches(Future<Map<String, dynamic>>? matchesData) {
+    
     return FutureBuilder(
       future: matchesData,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-            return Column(
-              children: [
-                Container(
-                  margin: EdgeInsets.symmetric(
-                      vertical: ((MediaQuery.of(context).size.height -350 )) / 2),
-                  child: const Center(
-                    child: CircularProgressIndicator(
-                      color: Colors.green,
-                    ),
+          return Column(
+            children: [
+              Container(
+                margin: EdgeInsets.symmetric(
+                    vertical: ((MediaQuery.of(context).size.height - 350)) / 2),
+                child: const Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.green,
                   ),
                 ),
-              ],
-            );
-          } else if (snapshot.hasError) {
-            return Column(
-              children: [
-                Container(
-                    margin: EdgeInsets.symmetric(
-                        vertical: ((MediaQuery.of(context).size.height -350) ) / 2),
-                    child: Center(child: Text('Error: ${snapshot.error}'))),
-              ],
-            );
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Column(
-              children: [
-                Container(
-                    margin: EdgeInsets.symmetric(
-                        vertical: ((MediaQuery.of(context).size.height -350 )/2 )),
-                    child: Center(child: Text('No matches found'))),
-              ],
-            );
-          } else {
-          List matches = snapshot.data!["matches"];
-          
-         
-          return Column(children: matches.map((m) {
-            
-            DateFormat.MONTH_DAY;
-            return Row(children: [
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 5,horizontal: 7),
-                child: Column(
-                  children: [
-                   Text("${DateFormat.Md().format(DateTime.parse(m["utcDate"]).add(Duration(hours: 7)))}"),
-                    Text("${DateFormat.Hm().format(DateTime.parse(m["utcDate"]).add(Duration(hours: 7)))}"),
-                  ],
-                ),
               ),
-              SizedBox(
-                        width: 32,
-                        height: 32,
-                        child: m["homeTeam"]["crest"].endsWith("png")
-                            ? Image.network(m["homeTeam"]["crest"])
-                            : SvgPicture.network(m["homeTeam"]["crest"]),
-                      ),
-              const SizedBox(width: 5,),
-              SizedBox(width: 105,child: Text(m["homeTeam"]["shortName"])),
-              
-              Container(width: 20,child: Center(child: Text("${m["score"]["fullTime"]["home"] ?? "??"}"))),
-              Text(" VS "),
-              Container(width: 20,child: Center(child: Text("${m["score"]["fullTime"]["away"]?? "??"}"))),
-              Container(width: 105,child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  
-                  Text(m["awayTeam"]["shortName"]),
-                ],
-              )),
-              SizedBox(width: 5,),
-              SizedBox(
-                        width: 32,
-                        height: 32,
-                        child: m["awayTeam"]["crest"].endsWith("png")
-                            ? Image.network(m["awayTeam"]["crest"])
-                            : SvgPicture.network(m["awayTeam"]["crest"]),
-                      ),
-            ],);
-          },).toList());
+            ],
+          );
+        } else if (snapshot.hasError) {
+          return Column(
+            children: [
+              Container(
+                  margin: EdgeInsets.symmetric(
+                      vertical:
+                          ((MediaQuery.of(context).size.height - 350)) / 2),
+                  child: Center(child: Text('Error: ${snapshot.error}'))),
+            ],
+          );
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return Column(
+            children: [
+              Container(
+                  margin: EdgeInsets.symmetric(
+                      vertical:
+                          ((MediaQuery.of(context).size.height - 350) / 2)),
+                  child: Center(child: Text('No matches found'))),
+            ],
+          );
+        } else {
+          List matches = snapshot.data!["matches"];
+
+          return Column(
+              children: matches.map(
+            (m) {
+              return Utility().getSingleMatch(m);
+            },
+          ).toList());
         }
       },
     );
@@ -242,6 +208,235 @@ class StandingUtil {
           ),
         ],
       ),
+    );
+  }
+
+  static Widget getCupGroup(List groups) {
+    return Container(
+      color: Colors.lightGreen,
+      child: Column(
+        children: [
+          Container(
+              padding: EdgeInsets.symmetric(vertical: 3),
+              child: Text("Group Stage")),
+          Container(
+            height: 3,
+            color: Colors.black,
+          ),
+          Column(
+              children: groups.map(
+            (e) {
+              List table = e["table"];
+              return Container(
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Container(width: 170, child: Text(e["group"])),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        SizedBox(
+                            width: 25,
+                            height: 20,
+                            child: Center(child: Text("P"))),
+                        SizedBox(
+                          width: 3,
+                        ),
+                        SizedBox(
+                            width: 25,
+                            height: 20,
+                            child: Center(child: Text("W"))),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        SizedBox(
+                            width: 25,
+                            height: 20,
+                            child: Center(child: Text("D"))),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        SizedBox(
+                            width: 25,
+                            height: 20,
+                            child: Center(child: Text("L"))),
+                        SizedBox(
+                          width: 2,
+                        ),
+                        SizedBox(
+                            width: 40,
+                            height: 20,
+                            child: Center(child: Text("G/A"))),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        SizedBox(
+                            width: 25,
+                            height: 20,
+                            child: Center(child: Text("Dif"))),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        SizedBox(
+                            width: 25,
+                            height: 20,
+                            child: Center(child: Text("Pts"))),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 3,
+                    ),
+                    Container(
+                      height: 1,
+                      color: Colors.black,
+                    ),
+                    Container(
+                      child: Column(
+                        children: table.map((team) {
+                          Color color;
+                          if (table[table.indexOf(team)]["position"] == 1 ||
+                              table[table.indexOf(team)]["position"] == 2) {
+                            color = Colors.green;
+                          } else if (table[table.indexOf(team)]["position"] ==
+                              3) {
+                            color = const Color.fromARGB(255, 227, 178, 29);
+                          } else if (table[table.indexOf(team)]["position"] ==
+                              4) {
+                            color = Colors.red;
+                          } else {
+                            color = Colors.white;
+                          }
+                          return Column(
+                            children: [
+                              Container(
+                                color: color,
+                                child: Row(
+                                  children: [
+                                    const SizedBox(
+                                      width: 5,
+                                    ),
+                                    Container(
+                                      width: 15,
+                                      child: Text(
+                                          team["position"].toString() + "."),
+                                    ),
+                                    Container(
+                                        width: 160,
+                                        child: Text(
+                                            overflow: TextOverflow.ellipsis,
+                                            team["team"]["shortName"])),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    SizedBox(
+                                        width: 25,
+                                        height: 20,
+                                        child: Center(
+                                            child: Text(team["playedGames"]
+                                                .toString()))),
+                                    SizedBox(
+                                      width: 3,
+                                    ),
+                                    SizedBox(
+                                        width: 25,
+                                        height: 20,
+                                        child: Center(
+                                            child:
+                                                Text(team["won"].toString()))),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    SizedBox(
+                                        width: 25,
+                                        height: 20,
+                                        child: Center(
+                                            child:
+                                                Text(team["draw"].toString()))),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    SizedBox(
+                                        width: 25,
+                                        height: 20,
+                                        child: Center(
+                                            child:
+                                                Text(team["lost"].toString()))),
+                                    SizedBox(
+                                      width: 2,
+                                    ),
+                                    Container(
+                                        width: 40,
+                                        height: 20,
+                                        child: Center(
+                                            child: Text(
+                                                "${team["goalsFor"].toString()}/${team["goalsAgainst"].toString()}"))),
+                                    SizedBox(
+                                      width: 8,
+                                    ),
+                                    SizedBox(
+                                        width: 25,
+                                        height: 20,
+                                        child: Center(
+                                            child: Text(team["goalDifference"]
+                                                .toString()))),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    SizedBox(
+                                        width: 25,
+                                        height: 20,
+                                        child: Center(
+                                            child: Text(
+                                                team["points"].toString()))),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                height: 1,
+                                color: Colors.black,
+                              )
+                            ],
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                    Container(
+                      height: 3,
+                      color: Colors.black,
+                    ),
+                  ],
+                ),
+              );
+            },
+          ).toList()),
+          SizedBox(height: 20,),
+          Text("Matches"),
+        ],
+      ),
+    );
+  }
+
+
+  static Widget getGroupMatch(List matchesData,int matchNumbers,int playedGames){
+    List matchNum = List.generate(matchNumbers,(i) => i);
+    return Container(
+      child: Column(children: matchNum.map((num){
+        return Column(
+
+          children: [
+            Container(padding: EdgeInsets.symmetric(horizontal: 40),child: Text("Match ${num +1}")),
+            Container(height: 3,color: Colors.black,),
+            Column(children: matchesData.sublist(num *playedGames,(num + 1) * playedGames).map((match){
+              return Utility().getSingleMatch(match);
+            }).toList(),),
+            Container(height: 3,color: Colors.black,),
+          ],
+        );
+      }).toList()),
     );
   }
 }
