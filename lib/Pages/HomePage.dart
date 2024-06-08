@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:footballcustom/Pages/Utility/Info/api.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -110,7 +111,7 @@ class _HomePageState extends State<HomePage> {
   Future<List<dynamic>> testValue() async {
     final response = await http.get(
       Uri.parse('http://api.football-data.org/v4/competitions/CL/matches/?status=SCHEDULED'),
-      headers: {'X-Auth-Token': '5213826a7f66402a9840bbfd3a78c20d'},
+      headers: {'X-Auth-Token': getApiHere()},
     );
     if (response.statusCode == 200) {
       return json.decode(response.body)["matches"];

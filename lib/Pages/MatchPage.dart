@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:footballcustom/Pages/Utility/Info/api.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
@@ -178,7 +179,7 @@ class _matchPageState extends State<matchPage> {
   Future<List<dynamic>> testValue() async {
     final response = await http.get(
       Uri.parse('http://api.football-data.org/v4/matches'),
-      headers: {'X-Auth-Token': '5213826a7f66402a9840bbfd3a78c20d'},
+      headers: {'X-Auth-Token': getApiHere()},
     );
     if (response.statusCode == 200) {
       

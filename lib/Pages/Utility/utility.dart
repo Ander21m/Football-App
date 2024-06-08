@@ -13,11 +13,13 @@ class Utility {
     "Primeira Liga",
     "Championship",
     "Champions League",
+    "World Cup",
+    "European Championship"
   ];
   late Map<String, dynamic> sameMatch;
   DateFormat dateformat = DateFormat("dd/MM");
   List<String> leagueTableHeader = ["standing", "matches"];
-  List<String> cupTableHeader = ["Group", "K.O","Group Matches"];
+  List<String> cupTableHeader = ["Group", "K.O", "Group Matches"];
   List<Map<String, String>> apiurl = [
     {
       "standing": "http://api.football-data.org/v4/competitions/PL/standings",
@@ -54,6 +56,14 @@ class Utility {
     {
       "standing": "http://api.football-data.org/v4/competitions/CL/standings",
       "matches": "http://api.football-data.org/v4/competitions/CL/matches"
+    },
+    {
+      "standing": "http://api.football-data.org/v4/competitions/WC/standings",
+      "matches": "http://api.football-data.org/v4/competitions/WC/matches"
+    },
+    {
+      "standing": "http://api.football-data.org/v4/competitions/EC/standings",
+      "matches": "http://api.football-data.org/v4/competitions/EC/matches"
     },
   ];
 
@@ -209,7 +219,7 @@ class Utility {
     );
   }
 
-  Widget getSingleKORoundMatch(List match, String header) {
+  Widget getSingleKORoundMatch(List match, String header, bool isOver100AndNotFinal) {
     return Column(
       children: [
         Row(
@@ -224,13 +234,17 @@ class Utility {
         ),
         Column(
           children: match.map((m) {
-            return Column(
-              children: [
-                Utility().getSingleMatch(m),
-                Container(height: 1,color: Colors.black,)
-              ],
-            );
-
+            return isOver100AndNotFinal
+                ? Column(
+                    children: [
+                      Utility().getSingleMatch(m),
+                      Container(
+                        height: 1,
+                        color: Colors.black,
+                      )
+                    ],
+                  )
+                : checkRegularOrExtraTimeForSingleKOMatch(m);
           }).toList(),
         ),
         Container(
@@ -256,7 +270,7 @@ class Utility {
         ),
         Column(
           children: match.map((m) {
-            return checkRegularOrExtraTimeForMatch(m,firstMatch);
+            return checkRegularOrExtraTimeForDoubleKOMatch(m, firstMatch);
           }).toList(),
         ),
         Container(
@@ -284,7 +298,7 @@ class Utility {
         SizedBox(
           width: 32,
           height: 32,
-          child: match["homeTeam"]["crest"].endsWith("png")
+          child: match["homeTeam"]["crest"]?.endsWith("png")
               ? Image.network(match["homeTeam"]["crest"])
               : SvgPicture.network(match["homeTeam"]["crest"]),
         ),
@@ -322,6 +336,7 @@ class Utility {
       ],
     );
   }
+
   Widget getExtraTimeMatch(Map<String, dynamic> match) {
     return Row(
       children: [
@@ -350,12 +365,14 @@ class Utility {
         Container(
             width: 20,
             child: Center(
-                child: Text("${match["score"]["regularTime"]["home"] ?? "??"}"))),
+                child:
+                    Text("${match["score"]["regularTime"]["home"] ?? "??"}"))),
         Text(" VS "),
         Container(
             width: 20,
             child: Center(
-                child: Text("${match["score"]["regularTime"]["away"] ?? "??"}"))),
+                child:
+                    Text("${match["score"]["regularTime"]["away"] ?? "??"}"))),
         Container(
             width: 105,
             child: Row(
@@ -394,7 +411,78 @@ class Utility {
     return leagueTableHeader;
   }
 
-  Widget checkRegularOrExtraTimeForMatch(Map<String, dynamic> match,List firstMatch) {
+  Widget checkRegularOrExtraTimeForSingleKOMatch(Map<String, dynamic> match) {
+    switch (match["score"]["duration"]) {
+      case "PENALTY_SHOOTOUT":
+        return Column(
+          children: [
+            Row(
+              children: [
+                SizedBox(
+                  width: 120,
+                ),
+                Container(
+                  child: Text(
+                    "(EXT ${match["score"]["extraTime"]["home"]} VS ${match["score"]["extraTime"]["away"]})",
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Container(
+                  child: Text(
+                    "(PEN ${match["score"]["penalties"]["home"]} VS ${match["score"]["penalties"]["away"]})",
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                ),
+              ],
+            ),
+            Utility().getExtraTimeMatch(match),
+            Container(
+              height: 1,
+              color: Colors.black,
+            )
+          ],
+        );
+
+      case "REGULAR":
+        return Column(children: [
+          Utility().getSingleMatch(match),
+          Container(
+            height: 1,
+            color: Colors.black,
+          )
+        ]);
+      default:
+        return Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 40,
+                ),
+                Container(
+                  child: Text(
+                    "(EXT ${match["score"]["extraTime"]["home"]} VS ${match["score"]["extraTime"]["away"]})",
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                ),
+              ],
+            ),
+            Utility().getExtraTimeMatch(match),
+            Container(
+              height: 1,
+              color: Colors.black,
+            )
+          ],
+        );
+    }
+  }
+
+  Widget checkRegularOrExtraTimeForDoubleKOMatch(
+      Map<String, dynamic> match, List firstMatch) {
     switch (match["score"]["duration"]) {
       case "PENALTY_SHOOTOUT":
         for (int i = 0; i < firstMatch.length; i++) {
@@ -407,65 +495,73 @@ class Utility {
           children: [
             Row(
               children: [
-                SizedBox(width: 85,),
+                SizedBox(
+                  width: 85,
+                ),
                 Container(
                   child: Text(
                     "(EXT ${match["score"]["extraTime"]["home"]} VS ${match["score"]["extraTime"]["away"]})",
                     style: TextStyle(fontWeight: FontWeight.w600),
                   ),
-                  
                 ),
-                SizedBox(width: 10,),
-                
+                SizedBox(
+                  width: 10,
+                ),
                 Container(
                   child: Text(
                     "(PEN ${match["score"]["penalties"]["home"]} VS ${match["score"]["penalties"]["away"]})",
                     style: TextStyle(fontWeight: FontWeight.w600),
                   ),
-                  
                 ),
-                SizedBox(width: 10,),
+                SizedBox(
+                  width: 10,
+                ),
                 Container(
                   child: Text(
                     "(AGG ${match["score"]["fullTime"]["home"]} VS ${match["score"]["fullTime"]["away"]})",
                     style: TextStyle(fontWeight: FontWeight.w600),
                   ),
-                  
                 ),
-                
               ],
             ),
             Utility().getExtraTimeMatch(match),
-            Container(height: 1,color: Colors.black,)
+            Container(
+              height: 1,
+              color: Colors.black,
+            )
           ],
         );
-      
+
       case "REGULAR":
-      for (int i = 0; i < firstMatch.length; i++) {
+        for (int i = 0; i < firstMatch.length; i++) {
           if (match["homeTeam"]["shortName"] ==
               firstMatch[i]["awayTeam"]["shortName"]) {
             sameMatch = firstMatch[i];
           }
         }
-        return Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-               SizedBox(width: 40,),
-                Container(
-                  child: Text(
-                    "(AGG ${sameMatch["score"]["fullTime"]["away"] + match["score"]["fullTime"]["home"]}  VS  ${sameMatch["score"]["fullTime"]["home"] + match["score"]["fullTime"]["away"]})",
-                    style: TextStyle(fontWeight: FontWeight.w600),
-                  ),
+        return Column(children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: 40,
+              ),
+              Container(
+                child: Text(
+                  "(AGG ${sameMatch["score"]["fullTime"]["away"] + match["score"]["fullTime"]["home"]}  VS  ${sameMatch["score"]["fullTime"]["home"] + match["score"]["fullTime"]["away"]})",
+                  style: TextStyle(fontWeight: FontWeight.w600),
                 ),
-              ],
-            ),
-            Utility().getSingleMatch(match),
-            Container(height: 1,color: Colors.black,)
-            ]);
+              ),
+            ],
+          ),
+          Utility().getSingleMatch(match),
+          Container(
+            height: 1,
+            color: Colors.black,
+          )
+        ]);
       default:
-       for (int i = 0; i < firstMatch.length; i++) {
+        for (int i = 0; i < firstMatch.length; i++) {
           if (match["homeTeam"]["shortName"] ==
               firstMatch[i]["awayTeam"]["shortName"]) {
             sameMatch = firstMatch[i];
@@ -475,29 +571,31 @@ class Utility {
           children: [
             Row(
               children: [
-                SizedBox(width: 120,),
+                SizedBox(
+                  width: 120,
+                ),
                 Container(
                   child: Text(
                     "(EXT ${match["score"]["extraTime"]["home"]} VS ${match["score"]["extraTime"]["away"]})",
                     style: TextStyle(fontWeight: FontWeight.w600),
                   ),
-                  
                 ),
-                SizedBox(width: 10,),
-              
-              
+                SizedBox(
+                  width: 10,
+                ),
                 Container(
                   child: Text(
                     "(AGG ${match["score"]["fullTime"]["home"]} VS ${match["score"]["fullTime"]["away"]})",
                     style: TextStyle(fontWeight: FontWeight.w600),
                   ),
-                  
                 ),
-                
               ],
             ),
             Utility().getExtraTimeMatch(match),
-            Container(height: 1,color: Colors.black,)
+            Container(
+              height: 1,
+              color: Colors.black,
+            )
           ],
         );
     }

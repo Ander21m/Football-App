@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:footballcustom/Pages/Utility/Info/api.dart';
 
 
 import 'package:footballcustom/Pages/Utility/leagues%20widget/standing.dart';
@@ -289,7 +290,8 @@ class _statsPageState extends State<statsPage> {
                           ),
                         ),
                         Container(height: 3,color: Colors.black,),
-                        getCupFormat(groups, _headerindex)
+                        
+                        getCupFormat(groups, _headerindex,Utility().getLeagueList()[_currentLeagueIndex])
                       ],
                     );
                   }
@@ -303,7 +305,7 @@ class _statsPageState extends State<statsPage> {
   Future<Map<String, dynamic>> getLeagueStanding(String apiurl) async {
     final response = await http.get(
       Uri.parse(apiurl),
-      headers: {'X-Auth-Token': '5213826a7f66402a9840bbfd3a78c20d'},
+      headers: {'X-Auth-Token': getApiHere()},
     );
     if (response.statusCode == 200) {
       return json.decode(response.body);
@@ -315,7 +317,7 @@ class _statsPageState extends State<statsPage> {
   Future<Map<String, dynamic>> getAllMatchesForLeague(String apiurl) async {
     final response = await http.get(
       Uri.parse(apiurl),
-      headers: {'X-Auth-Token': '5213826a7f66402a9840bbfd3a78c20d'},
+      headers: {'X-Auth-Token': getApiHere()},
     );
     if (response.statusCode == 200) {
       return json.decode(response.body);
@@ -403,10 +405,10 @@ class _statsPageState extends State<statsPage> {
     }
   }
 
-  Widget getCupFormat(List groups, int i) {
+  Widget getCupFormat(List groups, int i,String leagueName) {
     switch (i) {
       case 0:
-        return StandingUtil.getCupGroup(groups);
+        return StandingUtil.getCupGroup(groups,leagueName);
       case 1:
         allMatchesForLeague = getAllMatchesForLeague(
             "${Utility().getLeagueStandingapiList()[_currentLeagueIndex]["matches"]!}");
@@ -459,7 +461,7 @@ class _statsPageState extends State<statsPage> {
                       snapshot.data!["matches"].sublist(112, 120);
                   List semiMatch = snapshot.data!["matches"].sublist(120, 124);
                   List finalMatch = snapshot.data!["matches"].sublist(124);
-
+                 
                   return Container(
                     child: Column(
                       children: [
@@ -467,7 +469,7 @@ class _statsPageState extends State<statsPage> {
                         Utility().getSingleKORoundMatch(
                             sixteenTeamMatch.sublist(
                                 0, (sixteenTeamMatch.length / 2).toInt()),
-                            "Round Of 16(1st Round)"),
+                            "Round Of 16(1st Round)",true),
                         Utility().getDoubleKORoundMatch(
                             sixteenTeamMatch
                                 .sublist((sixteenTeamMatch.length / 2).toInt()),
@@ -476,7 +478,7 @@ class _statsPageState extends State<statsPage> {
                         Utility().getSingleKORoundMatch(
                             quarterMatch.sublist(
                                 0, (quarterMatch.length / 2).toInt()),
-                            "Quarter Final(1st Round)"),
+                            "Quarter Final(1st Round)",true),
                         Utility().getDoubleKORoundMatch(
                             quarterMatch
                                 .sublist((quarterMatch.length / 2).toInt()),
@@ -485,17 +487,43 @@ class _statsPageState extends State<statsPage> {
                         Utility().getSingleKORoundMatch(
                             semiMatch.sublist(
                                 0, (semiMatch.length / 2).toInt()),
-                            "Semi Final(1st Round)"),
+                            "Semi Final(1st Round)",true),
                         Utility().getDoubleKORoundMatch(
                             semiMatch.sublist((semiMatch.length / 2).toInt()),
                             "Semi Final(2nd Round)",semiMatch.sublist(
                                 0, (semiMatch.length / 2).toInt()),),
-                        Utility().getSingleKORoundMatch(finalMatch, "Final"),
+                        Utility().getSingleKORoundMatch(finalMatch, "Final",false),
                       ],
                     ),
                   );
                 } else {
-                  return Text("text");
+                  if(snapshot.data!["matches"][0]["area"]["name"] == "World"){
+                    List sixteenTeamMatch =
+                      snapshot.data!["matches"].sublist(48,56);
+                  List quarterMatch =
+                      snapshot.data!["matches"].sublist(56, 60);
+                  List semiMatch = snapshot.data!["matches"].sublist(60, 62);
+                  List finalMatch = snapshot.data!["matches"].sublist(63);
+                  bool isOver100AndNotFinal = false;
+                    return Container(child: Column(children: [
+                      Utility().getSingleKORoundMatch(
+                            sixteenTeamMatch,
+                            "Round Of 16",isOver100AndNotFinal),
+                      Utility().getSingleKORoundMatch(
+                            quarterMatch,
+                            "Quarter Final",isOver100AndNotFinal),
+                      Utility().getSingleKORoundMatch(
+                            semiMatch,
+                            "Semi Final",isOver100AndNotFinal),
+
+                      Utility().getSingleKORoundMatch(
+                            finalMatch,
+                            "Final",isOver100AndNotFinal),
+                    ],),);
+                  }
+                  else{
+                    return Center(child: Text("No Information yet"));
+                  }
                 }
               }
             });
@@ -550,7 +578,13 @@ class _statsPageState extends State<statsPage> {
                   return StandingUtil.getGroupMatch(snapshot.data!["matches"], 6, 16);
                 }
                 else{
-                  return Text("Text");
+                  if(snapshot.data!["matches"][0]["area"]["name"] == "World"){
+                    return StandingUtil.getGroupMatch(snapshot.data!["matches"], 3, 16);
+                  }
+                  else{
+                    return StandingUtil.getGroupMatch(snapshot.data!["matches"], 3, 12);
+                  }
+                  
                 }
               }});
       default:

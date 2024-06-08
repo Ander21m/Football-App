@@ -211,7 +211,7 @@ class StandingUtil {
     );
   }
 
-  static Widget getCupGroup(List groups) {
+  static Widget getCupGroup(List groups,String leagueName) {
     return Container(
       color: Colors.lightGreen,
       child: Column(
@@ -303,7 +303,7 @@ class StandingUtil {
                             color = Colors.green;
                           } else if (table[table.indexOf(team)]["position"] ==
                               3) {
-                            color = const Color.fromARGB(255, 227, 178, 29);
+                            color =  leagueName.endsWith("League")? const Color.fromARGB(255, 227, 178, 29):Colors.red;
                           } else if (table[table.indexOf(team)]["position"] ==
                               4) {
                             color = Colors.red;
@@ -413,8 +413,7 @@ class StandingUtil {
               );
             },
           ).toList()),
-          SizedBox(height: 20,),
-          Text("Matches"),
+          
         ],
       ),
     );
@@ -423,6 +422,7 @@ class StandingUtil {
 
   static Widget getGroupMatch(List matchesData,int matchNumbers,int playedGames){
     List matchNum = List.generate(matchNumbers,(i) => i);
+    
     return Container(
       child: Column(children: matchNum.map((num){
         return Column(
