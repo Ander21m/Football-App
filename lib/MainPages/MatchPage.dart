@@ -3,10 +3,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:footballcustom/Pages/Utility/Info/api.dart';
-import 'package:footballcustom/Pages/Utility/utility.dart';
+
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+
+import 'Utility/Info/api.dart';
+import 'Utility/utility.dart';
 
 class matchPage extends StatefulWidget {
   const matchPage({super.key});
@@ -19,17 +21,28 @@ class _matchPageState extends State<matchPage> {
   Future<List<dynamic>>? matches;
   final DateTime _currentDay = DateTime.now();
   List<Map<String, List<dynamic>>> matchData = [];
+  
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     matches = testValue();
+   
+  }
+
+  
+  @override
+  void dispose() {
+    
+    // TODO: implement dispose
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      
       child: Container(
           child: FutureBuilder<List<dynamic>>(
         future: matches,
@@ -262,5 +275,7 @@ class _matchPageState extends State<matchPage> {
     } else {
       throw Exception('Failed to load live scores');
     }
+
+    
   }
 }

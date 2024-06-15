@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:footballcustom/Pages/FollowPage.dart';
-import 'package:footballcustom/Pages/Utility/utility.dart';
-import 'package:footballcustom/Pages/homepage.dart';
-import 'package:footballcustom/Pages/MatchPage.dart';
-import 'package:footballcustom/Pages/StatsPage.dart';
+
 import 'package:footballcustom/firstscreen.dart';
+
+import 'MainPages/FollowPage.dart';
+import 'MainPages/MatchPage.dart';
+import 'MainPages/StatsPage.dart';
+import 'MainPages/Utility/utility.dart';
+import 'MainPages/homepage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -78,7 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.pop(context); // Close the drawer
               },
               title: const Text(
-                'Item 1',
+                'Language',
                 style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.w500,
@@ -88,7 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             ListTile(
               title: const Text(
-                'Item 2',
+                'Settings',
                 style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.w500,
@@ -99,6 +101,59 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.pop(context); // Close the drawer
               },
             ),
+            ListTile(
+              title: const Text(
+                'Preminum',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18),
+              ),
+              onTap: () {
+                // Add your item 2 action here
+                Navigator.pop(context); // Close the drawer
+              },
+            ),
+            ListTile(
+              title: const Text(
+                'Feedback',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18),
+              ),
+              onTap: () {
+                // Add your item 2 action here
+                Navigator.pop(context); // Close the drawer
+              },
+            ),
+            ListTile(
+              title: const Text(
+                'FAQ',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18),
+              ),
+              onTap: () {
+                // Add your item 2 action here
+                Navigator.pop(context); // Close the drawer
+              },
+            ),
+            ListTile(
+              title: const Text(
+                'Rate us',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18),
+              ),
+              onTap: () {
+                // Add your item 2 action here
+                Navigator.pop(context); // Close the drawer
+              },
+            ),
+            
           ],
         ),
       ),

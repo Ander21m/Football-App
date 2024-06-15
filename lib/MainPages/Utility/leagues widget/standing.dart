@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:footballcustom/Pages/Utility/utility.dart';
+import 'package:footballcustom/MainPages/Utility/utility.dart';
+
 
 
 class StandingUtil {

@@ -1,16 +1,16 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:footballcustom/Pages/Utility/Info/api.dart';
-
-import 'package:footballcustom/Pages/Utility/leagues%20widget/standing.dart';
-import 'package:footballcustom/Pages/Utility/utility.dart';
 
 import 'package:http/http.dart' as http;
 
 import 'dart:convert';
 
 import 'package:intl/intl.dart';
+
+import 'Utility/Info/api.dart';
+import 'Utility/leagues widget/standing.dart';
+import 'Utility/utility.dart';
 
 class statsPage extends StatefulWidget {
   const statsPage({super.key});
