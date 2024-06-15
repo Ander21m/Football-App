@@ -87,6 +87,25 @@ class Utility {
     }
   }
 
+  String GetDayName(int weekdayNumber) {
+    switch (weekdayNumber) {
+      case 1:
+        return "Mon";
+      case 2:
+        return "Tue";
+      case 3:
+        return "Wed";
+      case 4:
+        return "Thur";
+      case 5:
+        return "Fri";
+      case 6:
+        return "Sat";
+      default:
+        return "Sun";
+    }
+  }
+
   AppBar homePageAppBar(GlobalKey<ScaffoldState> key) {
     return AppBar(
       title: const Text(
@@ -219,7 +238,8 @@ class Utility {
     );
   }
 
-  Widget getSingleKORoundMatch(List match, String header, bool isOver100AndNotFinal) {
+  Widget getSingleKORoundMatch(
+      List match, String header, bool isOver100AndNotFinal) {
     return Column(
       children: [
         Row(
@@ -234,17 +254,34 @@ class Utility {
         ),
         Column(
           children: match.map((m) {
-            return isOver100AndNotFinal
-                ? Column(
-                    children: [
-                      Utility().getSingleMatch(m),
-                      Container(
-                        height: 1,
-                        color: Colors.black,
-                      )
-                    ],
-                  )
-                : checkRegularOrExtraTimeForSingleKOMatch(m);
+            if (m["homeTeam"]["name"] != null &&
+                m["awayTeam"]["name"] != null) {
+              return isOver100AndNotFinal
+                  ? Column(
+                      children: [
+                        Utility().getSingleMatch(m),
+                        Container(
+                          height: 1,
+                          color: Colors.black,
+                        )
+                      ],
+                    )
+                  : checkRegularOrExtraTimeForSingleKOMatch(m);
+            } else {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 50,
+                  ),
+                  Center(
+                      child: Text(
+                    "No Information yet",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  )),
+                ],
+              );
+            }
           }).toList(),
         ),
         Container(
@@ -270,7 +307,24 @@ class Utility {
         ),
         Column(
           children: match.map((m) {
-            return checkRegularOrExtraTimeForDoubleKOMatch(m, firstMatch);
+            if (m["homeTeam"]["name"] != null &&
+                m["awayTeam"]["name"] != null) {
+              return checkRegularOrExtraTimeForDoubleKOMatch(m, firstMatch);
+            } else {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 50,
+                  ),
+                  Center(
+                      child: Text(
+                    "No Information yet",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  )),
+                ],
+              );
+            }
           }).toList(),
         ),
         Container(
@@ -599,5 +653,20 @@ class Utility {
           ],
         );
     }
+  }
+
+  Widget buildTeamCrest(Map<String, dynamic> team) {
+    if (team["name"] == null) {
+      return Icon(Icons.question_mark);
+    }
+
+    final crestUrl = team["crest"];
+    if (crestUrl == null) {
+      return Icon(Icons.question_mark);
+    }
+
+    return crestUrl.endsWith("png")
+        ? Image.network(crestUrl)
+        : SvgPicture.network(crestUrl);
   }
 }

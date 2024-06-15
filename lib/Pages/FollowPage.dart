@@ -12,14 +12,16 @@ class followPage extends StatefulWidget {
 
 class _followPageState extends State<followPage> {
   Future<Map<String,dynamic>>? test;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    test = Test("http://api.football-data.org/v4/competitions/WC/matches");
+    test = Test("http://api.football-data.org/v4/matches/?dateFrom=2024-06-09&dateTo=2024-06-19");
   }
   @override
   Widget build(BuildContext context) {
+   
     return const Text('text');
   }
 
@@ -29,7 +31,7 @@ class _followPageState extends State<followPage> {
       headers: {'X-Auth-Token':getApiHere()},
     );
     if (response.statusCode == 200) {
-    print(json.decode(response.body)["matches"][36]["area"]["name"]);
+    print(json.decode(response.body)["matches"][32]);
    
       
       return json.decode(response.body);

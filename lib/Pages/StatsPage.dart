@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:footballcustom/Pages/Utility/Info/api.dart';
 
-
 import 'package:footballcustom/Pages/Utility/leagues%20widget/standing.dart';
 import 'package:footballcustom/Pages/Utility/utility.dart';
 
@@ -29,7 +28,7 @@ class _statsPageState extends State<statsPage> {
   String? _currentyear;
   final List<String> yearNumbers = [];
   List<int> matchNumbers = [];
-  int _currentLeagueIndex = Utility().getLeagueList().length - 1;
+  int _currentLeagueIndex = 0 ;
   @override
   void initState() {
     // TODO: implement initState
@@ -289,9 +288,12 @@ class _statsPageState extends State<statsPage> {
                             ],
                           ),
                         ),
-                        Container(height: 3,color: Colors.black,),
-                        
-                        getCupFormat(groups, _headerindex,Utility().getLeagueList()[_currentLeagueIndex])
+                        Container(
+                          height: 3,
+                          color: Colors.black,
+                        ),
+                        getCupFormat(groups, _headerindex,
+                            Utility().getLeagueList()[_currentLeagueIndex])
                       ],
                     );
                   }
@@ -405,10 +407,10 @@ class _statsPageState extends State<statsPage> {
     }
   }
 
-  Widget getCupFormat(List groups, int i,String leagueName) {
+  Widget getCupFormat(List groups, int i, String leagueName) {
     switch (i) {
       case 0:
-        return StandingUtil.getCupGroup(groups,leagueName);
+        return StandingUtil.getCupGroup(groups, leagueName);
       case 1:
         allMatchesForLeague = getAllMatchesForLeague(
             "${Utility().getLeagueStandingapiList()[_currentLeagueIndex]["matches"]!}");
@@ -454,85 +456,116 @@ class _statsPageState extends State<statsPage> {
                   ],
                 );
               } else {
-                if (snapshot.data!["matches"].length> 100) {
+                if (snapshot.data!["matches"].length > 100) {
                   List sixteenTeamMatch =
                       snapshot.data!["matches"].sublist(96, 112);
                   List quarterMatch =
                       snapshot.data!["matches"].sublist(112, 120);
                   List semiMatch = snapshot.data!["matches"].sublist(120, 124);
                   List finalMatch = snapshot.data!["matches"].sublist(124);
-                 
+
                   return Container(
                     child: Column(
                       children: [
-                        
                         Utility().getSingleKORoundMatch(
                             sixteenTeamMatch.sublist(
                                 0, (sixteenTeamMatch.length / 2).toInt()),
-                            "Round Of 16(1st Round)",true),
+                            "Round Of 16(1st Round)",
+                            true),
                         Utility().getDoubleKORoundMatch(
-                            sixteenTeamMatch
-                                .sublist((sixteenTeamMatch.length / 2).toInt()),
-                            "Round Of 16(2nd Round)",sixteenTeamMatch.sublist(
-                                0, (sixteenTeamMatch.length / 2).toInt()),),
+                          sixteenTeamMatch
+                              .sublist((sixteenTeamMatch.length / 2).toInt()),
+                          "Round Of 16(2nd Round)",
+                          sixteenTeamMatch.sublist(
+                              0, (sixteenTeamMatch.length / 2).toInt()),
+                        ),
                         Utility().getSingleKORoundMatch(
                             quarterMatch.sublist(
                                 0, (quarterMatch.length / 2).toInt()),
-                            "Quarter Final(1st Round)",true),
+                            "Quarter Final(1st Round)",
+                            true),
                         Utility().getDoubleKORoundMatch(
-                            quarterMatch
-                                .sublist((quarterMatch.length / 2).toInt()),
-                            "Quarter Final(2nd Round)", quarterMatch.sublist(
-                                0, (quarterMatch.length / 2).toInt()),),
+                          quarterMatch
+                              .sublist((quarterMatch.length / 2).toInt()),
+                          "Quarter Final(2nd Round)",
+                          quarterMatch.sublist(
+                              0, (quarterMatch.length / 2).toInt()),
+                        ),
                         Utility().getSingleKORoundMatch(
                             semiMatch.sublist(
                                 0, (semiMatch.length / 2).toInt()),
-                            "Semi Final(1st Round)",true),
+                            "Semi Final(1st Round)",
+                            true),
                         Utility().getDoubleKORoundMatch(
-                            semiMatch.sublist((semiMatch.length / 2).toInt()),
-                            "Semi Final(2nd Round)",semiMatch.sublist(
-                                0, (semiMatch.length / 2).toInt()),),
-                        Utility().getSingleKORoundMatch(finalMatch, "Final",false),
+                          semiMatch.sublist((semiMatch.length / 2).toInt()),
+                          "Semi Final(2nd Round)",
+                          semiMatch.sublist(0, (semiMatch.length / 2).toInt()),
+                        ),
+                        Utility()
+                            .getSingleKORoundMatch(finalMatch, "Final", false),
                       ],
                     ),
                   );
                 } else {
-                  if(snapshot.data!["matches"][0]["area"]["name"] == "World"){
-                    List sixteenTeamMatch =
-                      snapshot.data!["matches"].sublist(48,56);
-                  List quarterMatch =
-                      snapshot.data!["matches"].sublist(56, 60);
-                  List semiMatch = snapshot.data!["matches"].sublist(60, 62);
-                  List finalMatch = snapshot.data!["matches"].sublist(63);
-                  bool isOver100AndNotFinal = false;
-                    return Container(child: Column(children: [
-                      Utility().getSingleKORoundMatch(
-                            sixteenTeamMatch,
-                            "Round Of 16",isOver100AndNotFinal),
-                      Utility().getSingleKORoundMatch(
-                            quarterMatch,
-                            "Quarter Final",isOver100AndNotFinal),
-                      Utility().getSingleKORoundMatch(
-                            semiMatch,
-                            "Semi Final",isOver100AndNotFinal),
-
-                      Utility().getSingleKORoundMatch(
-                            finalMatch,
-                            "Final",isOver100AndNotFinal),
-                    ],),);
-                  }
-                  else{
-                    return Center(child: Text("No Information yet"));
+                  if (snapshot.data!["matches"][0]["area"]["name"] == "World") {
+                    
+                      List sixteenTeamMatch =
+                          snapshot.data!["matches"].sublist(48, 56);
+                      List quarterMatch =
+                          snapshot.data!["matches"].sublist(56, 60);
+                      List semiMatch =
+                          snapshot.data!["matches"].sublist(60, 62);
+                      List finalMatch = snapshot.data!["matches"].sublist(63);
+                      bool isOver100AndNotFinal = false;
+                      return Container(
+                        child: Column(
+                          children: [
+                            Utility().getSingleKORoundMatch(sixteenTeamMatch,
+                                "Round Of 16", isOver100AndNotFinal),
+                            Utility().getSingleKORoundMatch(quarterMatch,
+                                "Quarter Final", isOver100AndNotFinal),
+                            Utility().getSingleKORoundMatch(
+                                semiMatch, "Semi Final", isOver100AndNotFinal),
+                            Utility().getSingleKORoundMatch(
+                                finalMatch, "Final", isOver100AndNotFinal),
+                          ],
+                        ),
+                      );
+                   
+                  } else {
+                    
+                   
+                      List sixteenTeamMatch =
+                          snapshot.data!["matches"].sublist(36, 44);
+                      List quarterMatch =
+                          snapshot.data!["matches"].sublist(44, 48);
+                      List semiMatch =
+                          snapshot.data!["matches"].sublist(48, 50);
+                      List finalMatch = snapshot.data!["matches"].sublist(50);
+                      bool isOver100AndNotFinal = false;
+                      return Container(
+                        child: Column(
+                          children: [
+                            Utility().getSingleKORoundMatch(sixteenTeamMatch,
+                                "Round Of 16", isOver100AndNotFinal),
+                            Utility().getSingleKORoundMatch(quarterMatch,
+                                "Quarter Final", isOver100AndNotFinal),
+                            Utility().getSingleKORoundMatch(
+                                semiMatch, "Semi Final", isOver100AndNotFinal),
+                            Utility().getSingleKORoundMatch(
+                                finalMatch, "Final", isOver100AndNotFinal),
+                          ],
+                        ),
+                      );
+                    
                   }
                 }
               }
             });
       case 2:
-      
-       allMatchesForLeague = getAllMatchesForLeague(
+        allMatchesForLeague = getAllMatchesForLeague(
             "${Utility().getLeagueStandingapiList()[_currentLeagueIndex]["matches"]!}");
 
-        
         return FutureBuilder(
             future: allMatchesForLeague,
             builder: (context, snapshot) {
@@ -573,20 +606,21 @@ class _statsPageState extends State<statsPage> {
                         child: Center(child: Text('No matches found'))),
                   ],
                 );
-              }else{
-                if(snapshot.data!["matches"].length > 100){
-                  return StandingUtil.getGroupMatch(snapshot.data!["matches"], 6, 16);
-                }
-                else{
-                  if(snapshot.data!["matches"][0]["area"]["name"] == "World"){
-                    return StandingUtil.getGroupMatch(snapshot.data!["matches"], 3, 16);
+              } else {
+                if (snapshot.data!["matches"].length > 100) {
+                  return StandingUtil.getGroupMatch(
+                      snapshot.data!["matches"], 6, 16);
+                } else {
+                  if (snapshot.data!["matches"][0]["area"]["name"] == "World") {
+                    return StandingUtil.getGroupMatch(
+                        snapshot.data!["matches"], 3, 16);
+                  } else {
+                    return StandingUtil.getGroupMatch(
+                        snapshot.data!["matches"], 3, 12);
                   }
-                  else{
-                    return StandingUtil.getGroupMatch(snapshot.data!["matches"], 3, 12);
-                  }
-                  
                 }
-              }});
+              }
+            });
       default:
         return Text("Nothing to match");
     }
