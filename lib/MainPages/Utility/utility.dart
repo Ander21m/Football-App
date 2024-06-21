@@ -109,7 +109,7 @@ class Utility {
   AppBar homePageAppBar(GlobalKey<ScaffoldState> key) {
     return AppBar(
       title: const Text(
-        "Football",
+        "Football Live",
         style: TextStyle(
             color: Color.fromARGB(255, 55, 184, 59),
             fontWeight: FontWeight.bold,
@@ -139,10 +139,24 @@ class Utility {
     );
   }
 
+  AppBar getNormalAppBar(){
+    return AppBar(
+        title: const Text(
+          "Football Live",
+          style: TextStyle(
+              color: Color.fromARGB(255, 55, 184, 59),
+              fontWeight: FontWeight.bold,
+              fontSize: 30),
+        ),
+        centerTitle: true,
+        backgroundColor: Color.fromARGB(255, 206, 204, 204),
+      );
+  }
+
   AppBar followPageAppBar(GlobalKey<ScaffoldState> key) {
     return AppBar(
       title: Text(
-        "Football",
+        "Football Live",
         style: TextStyle(
             color: Color.fromARGB(255, 55, 184, 59),
             fontWeight: FontWeight.bold,
@@ -175,7 +189,7 @@ class Utility {
   AppBar matchPageAppBar(GlobalKey<ScaffoldState> key) {
     return AppBar(
       title: Text(
-        "Football",
+        "Football Live",
         style: TextStyle(
             color: Color.fromARGB(255, 55, 184, 59),
             fontWeight: FontWeight.bold,
@@ -208,7 +222,7 @@ class Utility {
   AppBar StatsPageAppBar(GlobalKey<ScaffoldState> key) {
     return AppBar(
       title: Text(
-        "Football",
+        "Football Live",
         style: TextStyle(
             color: Color.fromARGB(255, 55, 184, 59),
             fontWeight: FontWeight.bold,

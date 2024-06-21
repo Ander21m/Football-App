@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:footballcustom/DrawerPages/faq.dart';
+import 'package:footballcustom/DrawerPages/feedback.dart';
 
 import 'package:footballcustom/firstscreen.dart';
 
@@ -67,7 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 color: Color.fromARGB(255, 45, 179, 49),
               ),
               child: Text(
-                'Drawer Header',
+                'Football Live',
                 style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
@@ -75,6 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             ListTile(
+              leading: Icon(Icons.language,color: Colors.blue,),
               onTap: () {
                 // Add your item 1 action here
                 Navigator.pop(context); // Close the drawer
@@ -89,6 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
               
             ),
             ListTile(
+              leading: Icon(Icons.settings),
               title: const Text(
                 'Settings',
                 style: TextStyle(
@@ -102,6 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
               },
             ),
             ListTile(
+              leading: Icon(Icons.local_grocery_store_outlined,color: Colors.amber,),
               title: const Text(
                 'Preminum',
                 style: TextStyle(
@@ -115,6 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
               },
             ),
             ListTile(
+              leading: Icon(Icons.feedback,color: Colors.indigo,),
               title: const Text(
                 'Feedback',
                 style: TextStyle(
@@ -124,10 +130,13 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               onTap: () {
                 // Add your item 2 action here
-                Navigator.pop(context); // Close the drawer
+                 Navigator.of(context).push(MaterialPageRoute(builder:(context) {
+                  return const FeedbackPage();
+                },));// Close the drawer
               },
             ),
             ListTile(
+              leading: Icon(Icons.question_answer_rounded,color: Colors.red,),
               title: const Text(
                 'FAQ',
                 style: TextStyle(
@@ -137,10 +146,13 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               onTap: () {
                 // Add your item 2 action here
-                Navigator.pop(context); // Close the drawer
+                Navigator.of(context).push(MaterialPageRoute(builder:(context) {
+                  return FAQPage();
+                },)); // Close the drawer
               },
             ),
             ListTile(
+              leading: Icon(Icons.thumb_up_alt_rounded,color: Colors.green,),
               title: const Text(
                 'Rate us',
                 style: TextStyle(
