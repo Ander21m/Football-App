@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:footballcustom/DrawerPages/faq.dart';
 import 'package:footballcustom/DrawerPages/feedback.dart';
+import 'package:footballcustom/DrawerPages/premium.dart';
 
 import 'package:footballcustom/firstscreen.dart';
 
@@ -35,7 +36,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  
   int _pageIndex = 0;
 
   List<Widget> pageWidgets = [
@@ -43,7 +43,6 @@ class _MyHomePageState extends State<MyHomePage> {
     const matchPage(),
     const followPage(),
     const statsPage(),
-    
   ];
 
   void onBottomTap(int index) {
@@ -62,9 +61,8 @@ class _MyHomePageState extends State<MyHomePage> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
-           const DrawerHeader(
+            const DrawerHeader(
               padding: EdgeInsets.symmetric(vertical: 50, horizontal: 30),
-              
               decoration: BoxDecoration(
                 color: Color.fromARGB(255, 45, 179, 49),
               ),
@@ -77,7 +75,10 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             ListTile(
-              leading: Icon(Icons.language,color: Colors.blue,),
+              leading: Icon(
+                Icons.language,
+                color: Colors.blue,
+              ),
               onTap: () {
                 // Add your item 1 action here
                 Navigator.pop(context); // Close the drawer
@@ -89,7 +90,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     fontWeight: FontWeight.w500,
                     fontSize: 18),
               ),
-              
             ),
             ListTile(
               leading: Icon(Icons.settings),
@@ -106,7 +106,10 @@ class _MyHomePageState extends State<MyHomePage> {
               },
             ),
             ListTile(
-              leading: Icon(Icons.local_grocery_store_outlined,color: Colors.amber,),
+              leading: Icon(
+                Icons.local_grocery_store_outlined,
+                color: Colors.amber,
+              ),
               title: const Text(
                 'Preminum',
                 style: TextStyle(
@@ -116,11 +119,18 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               onTap: () {
                 // Add your item 2 action here
-                Navigator.pop(context); // Close the drawer
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) {
+                    return PremiumPage();
+                  },
+                )); // Close the drawer
               },
             ),
             ListTile(
-              leading: Icon(Icons.feedback,color: Colors.indigo,),
+              leading: Icon(
+                Icons.feedback,
+                color: Colors.indigo,
+              ),
               title: const Text(
                 'Feedback',
                 style: TextStyle(
@@ -130,13 +140,18 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               onTap: () {
                 // Add your item 2 action here
-                 Navigator.of(context).push(MaterialPageRoute(builder:(context) {
-                  return const FeedbackPage();
-                },));// Close the drawer
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) {
+                    return const FeedbackPage();
+                  },
+                )); // Close the drawer
               },
             ),
             ListTile(
-              leading: Icon(Icons.question_answer_rounded,color: Colors.red,),
+              leading: Icon(
+                Icons.question_answer_rounded,
+                color: Colors.red,
+              ),
               title: const Text(
                 'FAQ',
                 style: TextStyle(
@@ -146,13 +161,18 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               onTap: () {
                 // Add your item 2 action here
-                Navigator.of(context).push(MaterialPageRoute(builder:(context) {
-                  return FAQPage();
-                },)); // Close the drawer
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) {
+                    return FAQPage();
+                  },
+                )); // Close the drawer
               },
             ),
             ListTile(
-              leading: Icon(Icons.thumb_up_alt_rounded,color: Colors.green,),
+              leading: Icon(
+                Icons.thumb_up_alt_rounded,
+                color: Colors.green,
+              ),
               title: const Text(
                 'Rate us',
                 style: TextStyle(
@@ -165,18 +185,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.pop(context); // Close the drawer
               },
             ),
-            
           ],
         ),
       ),
       body: Container(
-          child: pageWidgets[_pageIndex],
-
-
-         ),
-
-
-
+        child: pageWidgets[_pageIndex],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         selectedItemColor: Colors.green,
