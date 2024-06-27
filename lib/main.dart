@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'package:footballcustom/DrawerPages/faq.dart';
 import 'package:footballcustom/DrawerPages/feedback.dart';
+import 'package:footballcustom/DrawerPages/language.dart';
 import 'package:footballcustom/DrawerPages/premium.dart';
 
 import 'package:footballcustom/firstscreen.dart';
@@ -11,17 +13,26 @@ import 'MainPages/StatsPage.dart';
 import 'MainPages/Utility/utility.dart';
 import 'MainPages/homepage.dart';
 
+
 void main() {
-  runApp(const MyApp());
+  runApp( MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatefulWidget {
+   MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    
+    return  MaterialApp(
+      
       title: 'Flutter Demo',
       home: SplashScreen(),
     );
@@ -29,7 +40,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+ 
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -79,10 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Icons.language,
                 color: Colors.blue,
               ),
-              onTap: () {
-                // Add your item 1 action here
-                Navigator.pop(context); // Close the drawer
-              },
+              
               title: const Text(
                 'Language',
                 style: TextStyle(
@@ -90,6 +98,12 @@ class _MyHomePageState extends State<MyHomePage> {
                     fontWeight: FontWeight.w500,
                     fontSize: 18),
               ),
+              onTap: () {
+                // Add your item 1 action here
+                Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                  return LanguagePage();
+                })); // Close the drawer
+              },
             ),
             ListTile(
               leading: Icon(Icons.settings),

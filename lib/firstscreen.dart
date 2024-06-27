@@ -5,14 +5,16 @@ import 'package:flutter/widgets.dart';
 import 'package:footballcustom/main.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
-
+  
+    
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
+
+      
   @override
   void initState() {
     // TODO: implement initState
@@ -21,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen>
     Future.delayed(const Duration(seconds: 3), () {
       Navigator.of(context)
           .pushReplacement(MaterialPageRoute(builder: (context) {
-        return const MyHomePage();
+        return  MyHomePage();
       }));
     });
   }
