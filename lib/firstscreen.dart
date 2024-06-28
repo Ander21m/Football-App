@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:footballcustom/signup.dart';
 
 import 'package:footballcustom/main.dart';
 
@@ -23,7 +24,7 @@ class _SplashScreenState extends State<SplashScreen>
     Future.delayed(const Duration(seconds: 3), () {
       Navigator.of(context)
           .pushReplacement(MaterialPageRoute(builder: (context) {
-        return  MyHomePage();
+        return  SignUp();
       }));
     });
   }
